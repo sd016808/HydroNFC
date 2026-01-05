@@ -5,13 +5,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HydroNFC - 智能飲水提醒</title>
+    
+    <!-- PWA 核心標籤 -->
     <link rel="manifest" href="manifest.json">
-    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/3100/3100566.png">
     <meta name="theme-color" content="#3b82f6">
-    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/3100/3100566.png">
+    
+    <!-- 腳本與樣式 -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <style>
         body { 
             font-family: 'Inter', sans-serif; 
@@ -22,6 +27,7 @@
             transition: height 0.5s ease-in-out;
         }
     </style>
+
 <script type="importmap">
 {
   "imports": {
@@ -36,30 +42,25 @@
 </head>
 <body class="bg-slate-50 text-slate-900">
     <div id="root"></div>
+    
     <script>
-      // Enhanced Service Worker Registration
+      // 更安全的 Service Worker 註冊邏輯
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-          // Construct the SW path relative to the current location's folder
+          // 確保僅在相同來源 (Origin) 下嘗試註冊，避免跨域或沙盒錯誤
           const swUrl = new URL('sw.js', window.location.href);
           
-          // Service Workers MUST be on the same origin. 
-          // If the environment is proxying from ai.studio to a sandbox domain,
-          // we only register if the origins match to avoid the security error.
           if (swUrl.origin === window.location.origin) {
-            navigator.serviceWorker.register(swUrl.pathname)
+            navigator.serviceWorker.register('./sw.js')
               .then(reg => {
-                console.log('ServiceWorker registered successfully. Scope:', reg.scope);
+                console.log('ServiceWorker 註冊成功，範圍:', reg.scope);
               })
               .catch(err => {
-                console.error('ServiceWorker registration failed:', err);
+                // 如果是 404 或環境不支援，優雅地處理而不中斷程式
+                console.warn('ServiceWorker 註冊略過或失敗 (常見於預覽環境):', err.message);
               });
           } else {
-            console.warn(
-              'ServiceWorker registration skipped due to origin mismatch.\n' +
-              'Page Origin: ' + window.location.origin + '\n' +
-              'Worker Origin: ' + swUrl.origin
-            );
+            console.log('來源不符，略過 ServiceWorker 註冊。');
           }
         });
       }
