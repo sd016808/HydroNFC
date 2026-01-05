@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { UserSettings } from '../types';
 import { Target, Bell, Clock, Save } from 'lucide-react';
 
@@ -9,7 +9,8 @@ interface SettingsProps {
 }
 
 export const Settings: React.FC<SettingsProps> = ({ settings, onSave }) => {
-  const [localSettings, setLocalSettings] = React.useState(settings);
+  // Fix: Removed generic type parameter for Babel compatibility
+  const [localSettings, setLocalSettings] = useState(settings);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -79,10 +80,6 @@ export const Settings: React.FC<SettingsProps> = ({ settings, onSave }) => {
           儲存設定
         </button>
       </form>
-      
-      <div className="bg-indigo-50 p-4 rounded-2xl text-xs text-indigo-600 leading-relaxed">
-        💡 <b>提示：</b> 設定合理的目標，並配合 NFC 標籤自動化記錄，能幫助您更輕鬆維持飲水習慣！
-      </div>
     </div>
   );
 };

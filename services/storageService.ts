@@ -7,20 +7,37 @@ const STORAGE_KEYS = {
   SETTINGS: 'hydro_settings'
 };
 
+const safeGetItem = (key: string): string | null => {
+  try {
+    return localStorage.getItem(key);
+  } catch (e) {
+    console.error('Storage access blocked:', e);
+    return null;
+  }
+};
+
+const safeSetItem = (key: string, value: string) => {
+  try {
+    localStorage.setItem(key, value);
+  } catch (e) {
+    console.error('Storage write blocked:', e);
+  }
+};
+
 export const storageService = {
   getLogs: (): WaterLog[] => {
-    const data = localStorage.getItem(STORAGE_KEYS.LOGS);
+    const data = safeGetItem(STORAGE_KEYS.LOGS);
     return data ? JSON.parse(data) : [];
   },
   
   saveLog: (log: WaterLog) => {
     const logs = storageService.getLogs();
     logs.push(log);
-    localStorage.setItem(STORAGE_KEYS.LOGS, JSON.stringify(logs));
+    safeSetItem(STORAGE_KEYS.LOGS, JSON.stringify(logs));
   },
 
   getTags: (): NFCTagMapping[] => {
-    const data = localStorage.getItem(STORAGE_KEYS.TAGS);
+    const data = safeGetItem(STORAGE_KEYS.TAGS);
     return data ? JSON.parse(data) : [];
   },
 
@@ -32,11 +49,11 @@ export const storageService = {
     } else {
       tags.push(tag);
     }
-    localStorage.setItem(STORAGE_KEYS.TAGS, JSON.stringify(tags));
+    safeSetItem(STORAGE_KEYS.TAGS, JSON.stringify(tags));
   },
 
   getSettings: (): UserSettings => {
-    const data = localStorage.getItem(STORAGE_KEYS.SETTINGS);
+    const data = safeGetItem(STORAGE_KEYS.SETTINGS);
     return data ? JSON.parse(data) : {
       dailyGoal: 2000,
       reminderInterval: 60,
@@ -45,6 +62,6 @@ export const storageService = {
   },
 
   saveSettings: (settings: UserSettings) => {
-    localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(settings));
+    safeSetItem(STORAGE_KEYS.SETTINGS, JSON.stringify(settings));
   }
 };

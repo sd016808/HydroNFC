@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Nfc, Loader2, X } from 'lucide-react';
 
 interface NFCModalProps {
@@ -10,8 +10,8 @@ interface NFCModalProps {
 }
 
 export const NFCModal: React.FC<NFCModalProps> = ({ isScanning, detectedTagId, onClose, onConfigureTag }) => {
-  const [customAmount, setCustomAmount] = React.useState(250);
-  const [tagName, setTagName] = React.useState('我的水杯');
+  const [customAmount, setCustomAmount] = useState(250);
+  const [tagName, setTagName] = useState('我的水杯');
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
