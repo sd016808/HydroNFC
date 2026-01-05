@@ -1,0 +1,5 @@
+{
+  "name": "HydroNFC - Smart Water Tracker",
+  "description": "A sophisticated water intake tracker with NFC tag support, personalized goals, and historical progress visualization.",
+  "requestFramePermissions": []
+}
